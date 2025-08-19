@@ -1,0 +1,139 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out
+                                                          % if you need a4paper
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
+                                                          % paper
+
+\IEEEoverridecommandlockouts                              % This command is only
+                                                          % needed if you want to
+                                                          % use the \thanks command
+\overrideIEEEmargins
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{import}
+\usepackage{lettrine}
+\usepackage{nameref}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{pdfpages}
+\usepackage[margin=0.5in]{geometry} % for PAPER & MARGIN
+\usepackage[many]{tcolorbox} % for COLORED BOXES (tikz and xcolor included)
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\newtheorem{definition}{Definition}[section]
+\graphicspath{{./images/}}
+\definecolor{main}{HTML}{DADADA}    % setting main color to be used
+\definecolor{sub}{HTML}{F5F5F5}
+
+\newtcolorbox{boxK}{
+    sharpish corners, % better drop shadow
+    boxrule = 0pt,
+    toprule = 4.5pt, % top rule weight
+    enhanced,
+    fuzzy shadow = {0pt}{-2pt}{-0.5pt}{0.5pt}{black!35} % {xshift}{yshift}{offset}{step}{options} 
+}
+
+\newtcolorbox{boxF}{
+    colback = sub,
+    enhanced,
+    boxrule = 1.5pt, 
+    colframe = white, % making the base for dash line
+    borderline = {0.8pt}{0pt}{main, dashed} % add "dashed" for dashed line
+}
+
+
+% The following packages can be found on http:\\www.ctan.org
+%\usepackage{graphics} % for pdf, bitmapped graphics files
+%\usepackage{epsfig} % for postscript graphics files
+%\usepackage{mathptmx} % assumes new font selection scheme installed
+%\usepackage{mathptmx} % assumes new font selection scheme installed
+%\usepackage{amsmath} % assumes amsmath package installed
+%\usepackage{amssymb}  % assumes amsmath package installed
+
+\title{\LARGE \bf
+Beyond Tokens: A Zero-Trust AuthZ Protocol for the Agentic Era
+}
+
+%\author{ \parbox{3 in}{\centering Huibert Kwakernaak*
+%         \thanks{*Use the $\backslash$thanks command to put information here}\\
+%         Faculty of Electrical Engineering, Mathematics and Computer Science\\
+%         University of Twente\\
+%         7500 AE Enschede, The Netherlands\\
+%         {\tt\small h.kwakernaak@autsubmit.com}}
+%         \hspace*{ 0.5 in}
+%         \parbox{3 in}{ \centering Pradeep Misra**
+%         \thanks{**The footnote marks may be inserted manually}\\
+%        Department of Electrical Engineering \\
+%         Wright State University\\
+%         Dayton, OH 45435, USA\\
+%         {\tt\small pmisra@cs.wright.edu}}
+%}
+
+\author{Nicola Gallo$^{1}$% <-this % stops a space
+\thanks{$^{1}$Nicola Gallo, Software Architect at Nitro Agility. 
+This work was carried out as part of professional activities within Nitro Agility and should be understood in that professional context. 
+{\tt\small nicola.gallo@nitroagility.com}}%
+}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+\import{./sections}{abstract.tex}
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+\label{sec:introduction}
+\import{./sections}{introduction.tex}
+
+\section{Tokens in the Authorization Perspective}
+\label{sec:token-authz-prospective}
+\import{./sections}{token-authz-prospective.tex}
+
+\section{The Industry Evolution to Zero Trust}
+\label{sec:the-industry-evolution-zerotrust}
+\import{./sections}{the-industry-evolution-zerotrust}
+
+
+\section*{Acknowledgments}
+This text was originally written by the author in English. 
+As a non-native English speaker, AI-based writing tools were employed solely to refine grammar, clarity, and fluency in order to speed up the writing process and reduce language errors.
+All ideas, arguments, and original contributions are entirely the author's own.
+
+\vspace{1em}
+The views and proposals expressed in this paper are intended for discussion and research purposes only. 
+They should not be interpreted as finalized standards or production-ready specifications.
+
+\addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
+                                  % on the last page of the document manually. It shortens
+                                  % the textheight of the last page by a suitable amount.
+                                  % This command does not take effect until the next page
+                                  % so it should come on the page before the last. Make
+                                  % sure that you do not shorten the textheight too much.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{thebibliography}{99}
+\bibitem{c1} Brewer, Eric. (2000). Towards robust distributed systems. PODC. 7. 10.1145/343477.343502. 
+\bibitem{c2} V. Velepucha and P. Flores, "A Survey on Microservices Architecture: Principles, Patterns and Migration Challenges," in IEEE Access, vol. 11, pp. 88339-88358, 2023, doi: 10.1109/ACCESS.2023.3305687.
+\bibitem{c3} V. Vernon, Domain-Driven Design Distilled. Reading, MA, USA: Addison-Wesley Professional, 2016.
+\bibitem{c4} [OpenID.2.0] OpenID Foundation, “OpenID Authentication 2.0,” December 2007.
+\bibitem{c5} [RFC6749]	M. Jones, D. Hardt, “The OAuth 2.0 Authorization Framework,” October 2012.
+\bibitem{c6} [RFC6750]	M. Jones, D. Hardt, “The OAuth 2.0 Authorization Framework: Bearer Token Usage", October 2012
+\bibitem{c7} L. Zhi, W. Jing, C. Xiao-su and J. Lian-xing, "Research on Policy-based Access Control Model," 2009 International Conference on Networks Security, Wireless Communications and Trusted Computing, Wuhan, China, 2009, pp. 164-167, doi: 10.1109/NSWCTC.2009.313.
+\bibitem{c8} Nicola Gallo, Antonio Radesca, "A Multi-Account and Multi-Tenant Policy-Based Access Control (PBAC) Approach for Distributed Systems Augmented with Risk Scores Generation".
+\bibitem{c9} D. J. Abadi, “Consistency Tradeoffs in Modern Distributed Database System Design: CAP is Only Part of the Story,” \emph{IEEE Computer}, vol. 45, no. 2, pp. 37–42, Feb. 2012. DOI: 10.1109/MC.2012.33
+\end{thebibliography}
+
+\end{document}

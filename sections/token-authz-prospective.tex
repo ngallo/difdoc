@@ -1,0 +1,115 @@
+Tokens have worked very well for authentication (AuthN).  
+An authentication token simply states: \emph{``I am Nicola''}.  
+If this statement is true now, it will remain true ever from now.  
+
+However, there are essentially two problems:
+\begin{enumerate}
+    \item \textbf{Trust}: anyone can claim such a statement.  
+    To address this, tokens must be signed, giving rise to mechanisms such as JWTs.
+    \item \textbf{Replay}: anyone can replay the same token.  
+    The only option to mitigate this risk is to add an expiration time.
+\end{enumerate}
+
+These are trade-offs and represent inherent limits of security.  
+In practice, tokens exploit a PACELC-style trade-off: in the absence of partitions, they take advantage of the latency, consistency trade-off.  
+
+\begin{boxF}
+    The PACELC theorem \cite{c9} states that in case of network partitioning (P) in a distributed computer system, one has to choose between availability (A) and consistency (C) (as per the CAP theorem), but else (E), even when the system is running normally in the absence of partitions, one has to choose between latency (L) and loss of consistency (C).
+\end{boxF}
+
+This trade-off becomes dangerous when tokens represent authorization (AuthZ).  
+For example, ``Nicola is entitled to a certain role now'' may be true at one moment 
+but false only a few seconds later.  
+Here tokens become fragile: while they have worked well for authentication, 
+it is a mistake to assume they must also be the golden standard for authorization.  
+
+Below we present a more formal representation of this problem.
+
+\subsection{Temporal Validity and Risk}
+Let $T_a$ be the validity period of an authentication token and $T_z$ the validity of an authorization.  
+To ensure security:
+\[
+T_z \ll T_a, \quad \text{ideally } T_z \to 0
+\]
+In practice, $T_z$ should be kept as short as feasible, though operational trade-offs may apply.  
+
+The risk of compromise grows with validity:
+\[
+R(T) = f(T), \quad f'(T) > 0
+\]
+Thus, long-lived static authorization tokens increase exposure.
+
+\subsection{Transitive Delegation}
+A delegation between $A$ and $B$ is denoted:
+\[
+D_i : A \rightarrow B
+\]
+A chain of $n$ delegations is:
+\[
+D_1 \circ D_2 \circ \dots \circ D_n
+\]
+
+If a token explicitly encodes a single linear chain of $n$ delegations, 
+its size grows linearly:
+\[
+O(n)
+\]
+
+However, when delegation supports branching, conditions, or attenuation, 
+the number of possible valid paths increases combinatorially. 
+Encoding all possible transitive delegations into a static token leads to exponential growth in the worst case:
+\[
+O(2^n)
+\]
+
+This is not scalable. Therefore, authorization must be reconstructed dynamically at request time.
+
+\subsection{Context and Runtime Validity}
+System state evolves with time:
+\[
+S(t) = \{E, W, P\}
+\]
+where $E$ are entities, $W$ workloads, and $P$ policies.  
+
+At request time $t_r$, validity requires:
+\[
+\exists p \in P \;\; \text{valid for } (e,w) \mid t=t_r
+\]
+Static tokens cannot guarantee consistency with the live system state $S(t_r)$.
+
+\subsection{Trust Model}
+Authorization is a function of the live context:
+\[
+T(E, W, P, t) =
+\begin{cases}
+1 & \text{if authorized at time $t$}\\
+0 & \text{otherwise}
+\end{cases}
+\]
+
+Static tokens implicitly encode authorization state at issuance time $t_0$, 
+and reuse assumes that the same decision holds for all later times:
+\[
+T(E,W,P,t_0) = T(E,W,P,t), \; \forall t>t_0
+\]
+which is false in dynamic systems.
+
+\subsection{Conclusion}
+Token-based authorization is:
+\begin{enumerate}
+\item \textbf{Insecure}: $R(T)$ increases with $T$.
+\item \textbf{Non-scalable}: delegation graphs may induce combinatorial explosion (up to $O(2^n)$).
+\item \textbf{Inconsistent}: $S(t) \neq S(t_0)$ in dynamic systems.
+\end{enumerate}
+Therefore, \textbf{authorization must be computed on-demand}, consistent with Zero Trust principles.
+
+\subsection{Practical Considerations}
+The model above is a theoretical ideal; in practice it is almost impossible to achieve perfectly. 
+As in many areas of security, trade-offs must be made to balance feasibility and protection.  
+What matters is not the invention of a ``better token'' but the design of a more sophisticated 
+authorization engine capable of assessing multiple sources of trust --- including tokens, 
+capabilities (e.g.\ zcaps), contextual signals, and other dynamic inputs --- in a best-effort approach.  
+
+The key point is that the next generation of authorization protocols cannot remain token-centric. 
+Instead, authorization must emerge from a richer machinery that integrates diverse identities 
+and trust sources, and can even operate \emph{without} tokens altogether.
