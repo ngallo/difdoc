@@ -10,12 +10,12 @@ The first point to understand is that when a PDP is asked to take a decision, th
     \item the identity of the \textbf{workload} requesting the decision (it cannot be manual, otherwise it would not scale);
     \item the identity of the \textbf{subject} (human or non-human) that is the target of the evaluation.
 \end{itemize}
-These identities may be expressed via \textbf{tokens}, \textbf{SPIFFE}, \textbf{ZCAP}, or any other valid identity proof.  
+These identities may be expressed via \textbf{tokens}, \textbf{SPIFFE}, \textbf{ZCAP-LD,}, or any other valid identity proof.  
 
 \vspace{0.5em}  
 In this way, a \textbf{Trust Chain} can be built as the composition of multiple \textbf{Trust Inputs}, 
 possibly with parallel branches. These inputs must connect with autonomous components 
-and be usable across multiple transport layers.  
+and be usable across multiple transport layers.
 
 The PDP receives as input an \textbf{authorization context}, which includes:
 \begin{itemize}
