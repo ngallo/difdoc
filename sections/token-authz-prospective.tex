@@ -1,46 +1,46 @@
-Tokens have worked very well for authentication (AuthN).  
-An authentication token simply states: \emph{``I am Nicola''}.  
+Tokens have worked very well for \textbf{authentication (AuthN)}.  
+An \textbf{authentication token} simply states: \emph{``I am Nicola''}.  
 If this statement is true now, it will remain true ever from now.  
 
 However, there are essentially two problems:
 \begin{enumerate}
     \item \textbf{Trust}: anyone can claim such a statement.  
-    To address this, tokens must be signed, giving rise to mechanisms such as JWTs.
+    To address this, tokens must be \textbf{signed}, giving rise to mechanisms such as \textbf{JWTs}.
     \item \textbf{Replay}: anyone can replay the same token.  
-    The only option to mitigate this risk is to add an expiration time.
+    The only option to mitigate this risk is to add an \textbf{expiration time}.
 \end{enumerate}
 
-These are trade-offs and represent inherent limits of security.  
-In practice, tokens exploit a PACELC-style trade-off: in the absence of partitions, they take advantage of the latency, consistency trade-off.  
+These are \textbf{trade-offs} and represent inherent \textbf{limits of security}.  
+In practice, tokens exploit a \textbf{PACELC-style trade-off}: in the absence of partitions, they take advantage of the \textbf{latency–consistency} trade-off.  
 
 \begin{boxF}
-    The PACELC theorem \cite{c9} states that in case of network partitioning (P) in a distributed computer system, one has to choose between availability (A) and consistency (C) (as per the CAP theorem), but else (E), even when the system is running normally in the absence of partitions, one has to choose between latency (L) and loss of consistency (C).
+    The \textbf{PACELC theorem} \cite{c9} states that in case of \textbf{network partitioning (P)} in a \textbf{distributed system}, one has to choose between \textbf{availability (A)} and \textbf{consistency (C)} (as per the CAP theorem), but else (E), even when the system is running normally in the absence of partitions, one has to choose between \textbf{latency (L)} and \textbf{loss of consistency (C)}.
 \end{boxF}
 
-This trade-off becomes dangerous when tokens represent authorization (AuthZ).  
-For example, ``Nicola is entitled to a certain role now'' may be true at one moment 
+This trade-off becomes dangerous when tokens represent \textbf{authorization (AuthZ)}.  
+For example, \emph{``Nicola is entitled to a certain role now''} may be true at one moment 
 but false only a few seconds later.  
-Here tokens become fragile: while they have worked well for authentication, 
-it is a mistake to assume they must also be the golden standard for authorization.  
+Here \textbf{tokens become fragile}: while they have worked well for \textbf{authentication}, 
+it is a mistake to assume they must also be the \textbf{golden standard for authorization}.  
 
 Below we present a more formal representation of this problem.
 
 \subsection{Temporal Validity and Risk}
-Let $T_a$ be the validity period of an authentication token and $T_z$ the validity of an authorization.  
+Let $T_a$ be the validity period of an \textbf{authentication token} and $T_z$ the validity of an \textbf{authorization}.  
 To ensure security:
 \[
 T_z \ll T_a, \quad \text{ideally } T_z \to 0
 \]
 In practice, $T_z$ should be kept as short as feasible, though operational trade-offs may apply.  
 
-The risk of compromise grows with validity:
+The \textbf{risk of compromise} grows with validity:
 \[
 R(T) = f(T), \quad f'(T) > 0
 \]
-Thus, long-lived static authorization tokens increase exposure.
+Thus, \textbf{long-lived static authorization tokens} increase exposure.
 
 \subsection{Transitive Delegation}
-A delegation between $A$ and $B$ is denoted:
+A \textbf{delegation} between $A$ and $B$ is denoted:
 \[
 D_i : A \rightarrow B
 \]
@@ -55,30 +55,30 @@ its size grows linearly:
 O(n)
 \]
 
-However, when delegation supports branching, conditions, or attenuation, 
+However, when delegation supports \textbf{branching}, \textbf{conditions}, or \textbf{attenuation}, 
 the number of possible valid paths increases combinatorially. 
-Encoding all possible transitive delegations into a static token leads to exponential growth in the worst case:
+Encoding all possible transitive delegations into a \textbf{static token} leads to exponential growth in the worst case:
 \[
 O(2^n)
 \]
 
-This is not scalable. Therefore, authorization must be reconstructed dynamically at request time.
+This is not scalable. Therefore, \textbf{authorization must be reconstructed dynamically at request time}.
 
 \subsection{Context and Runtime Validity}
-System state evolves with time:
+\textbf{System state} evolves with time:
 \[
 S(t) = \{E, W, P\}
 \]
-where $E$ are entities, $W$ workloads, and $P$ policies.  
+where $E$ are \textbf{entities}, $W$ \textbf{workloads}, and $P$ \textbf{policies}.  
 
 At request time $t_r$, validity requires:
 \[
 \exists p \in P \;\; \text{valid for } (e,w) \mid t=t_r
 \]
-Static tokens cannot guarantee consistency with the live system state $S(t_r)$.
+\textbf{Static tokens} cannot guarantee consistency with the \textbf{live system state} $S(t_r)$.
 
 \subsection{Trust Model}
-Authorization is a function of the live context:
+\textbf{Authorization} is a function of the \textbf{live context}:
 \[
 T(E, W, P, t) =
 \begin{cases}
@@ -87,29 +87,28 @@ T(E, W, P, t) =
 \end{cases}
 \]
 
-Static tokens implicitly encode authorization state at issuance time $t_0$, 
+\textbf{Static tokens} implicitly encode \textbf{authorization state} at issuance time $t_0$, 
 and reuse assumes that the same decision holds for all later times:
 \[
 T(E,W,P,t_0) = T(E,W,P,t), \; \forall t>t_0
 \]
-which is false in dynamic systems.
+which is false in \textbf{dynamic systems}.
 
 \subsection{Conclusion}
 Token-based authorization is:
 \begin{enumerate}
 \item \textbf{Insecure}: $R(T)$ increases with $T$.
-\item \textbf{Non-scalable}: delegation graphs may induce combinatorial explosion (up to $O(2^n)$).
-\item \textbf{Inconsistent}: $S(t) \neq S(t_0)$ in dynamic systems.
+\item \textbf{Non-scalable}: \textbf{delegation graphs} may induce combinatorial explosion (up to $O(2^n)$).
+\item \textbf{Inconsistent}: $S(t) \neq S(t_0)$ in \textbf{dynamic systems}.
 \end{enumerate}
-Therefore, \textbf{authorization must be computed on-demand}, consistent with Zero Trust principles.
+Therefore, \textbf{authorization must be computed on-demand}, consistent with \textbf{Zero Trust principles}.
 
 \subsection{Practical Considerations}
-The model above is a theoretical ideal; in practice it is almost impossible to achieve perfectly. 
-As in many areas of security, trade-offs must be made to balance feasibility and protection.  
-What matters is not the invention of a ``better token'' but the design of a more sophisticated 
-authorization engine capable of assessing multiple sources of trust --- including tokens, 
-capabilities (e.g.\ zcaps), contextual signals, and other dynamic inputs --- in a best-effort approach.  
+The model above is a \textbf{theoretical ideal}; in practice it is almost impossible to achieve perfectly. 
+As in many areas of \textbf{security}, trade-offs must be made to balance \textbf{feasibility} and \textbf{protection}.  
+What matters is not the invention of a \textbf{``better token''} but the design of a more \textbf{sophisticated authorization engine} capable of assessing \textbf{multiple sources of trust} --- including \textbf{tokens}, 
+\textbf{capabilities} (e.g.\ zcaps), \textbf{contextual signals}, and other \textbf{dynamic inputs} --- in a \textbf{best-effort approach}.  
 
-The key point is that the next generation of authorization protocols cannot remain token-centric. 
-Instead, authorization must emerge from a richer machinery that integrates diverse identities 
-and trust sources, and can even operate \emph{without} tokens altogether.
+The key point is that the \textbf{next generation of authorization protocols} cannot remain \textbf{token-centric}. 
+Instead, \textbf{authorization} must emerge from a richer machinery that integrates \textbf{diverse identities} 
+and \textbf{trust sources}, and can even operate \emph{without} \textbf{tokens} altogether.
