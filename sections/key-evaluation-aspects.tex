@@ -1,0 +1,45 @@
+To properly evaluate a Zero Trust authorization protocol, the following aspects should be analyzed:
+
+\begin{itemize}
+    \item \textbf{Communication:}  
+    Consider the use of state machines and workflows (this paper uses state machines for simplicity).  
+    Each node should be capable of making a decision based on policies and then invoking the next node in the chain.  
+
+    \item \textbf{Transport Layer:}  
+    Analyze how information flows across edges using different transport layers.  
+    Examples include traditional APIs or event-driven systems such as Kafka.  
+
+    \item \textbf{Flow Types:}  
+    Different types of flows may exist (e.g., returning a direct result or not).  
+    Why not have an agent that queries systems and provides a consolidated status?  
+    Even feedback itself could be delegated to another agent, making flows more resilient when intermediate agents are down.  
+
+    \item \textbf{Scopes:}  
+    Analyze the request scope and how down-scope propagation is handled across services and agents.  
+
+    \item \textbf{Long-Running Processing:}  
+    Workflows may last a long time, especially when implemented over Kafka or similar event-streaming platforms.  
+    For example, handling an employee’s last day in a company may require multi-step, long-running authorization checks.  
+
+    \item \textbf{Rollback and Recovery:}  
+    Consider how rollback and recovery are managed in case of failures during authorization workflows.  
+
+    \item \textbf{Two-Identity-One-Action:}  
+    Authorization typically revolves around resources, but every action involves at least two identities:  
+    the workload requesting the action and the subject (human or non-human).  
+    To prevent impersonation, machine identity must always be included.  
+
+    \item \textbf{Delegation:}  
+    Handling impersonation or “acting on behalf of” models introduces delegation challenges.  
+    A robust protocol must define secure delegation mechanisms.  
+
+    \item \textbf{Federation:}  
+    Authorization must work across federated organizations, which introduces challenges in calling into external domains.  
+
+    \item \textbf{Governance:}  
+    Authorization governance is a mix of user-level policies and platform-level priorities.  
+    Both dimensions must be managed together.  
+
+    \item \textbf{Auditing:}  
+    Define how auditing can be applied to authorization workflows to ensure accountability and traceability.  
+\end{itemize}
