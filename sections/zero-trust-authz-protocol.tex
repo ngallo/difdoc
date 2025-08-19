@@ -10,36 +10,32 @@ The first point to understand is that when a PDP is asked to take a decision, th
     \item the identity of the \textbf{workload} requesting the decision (it cannot be manual, otherwise it would not scale);
     \item the identity of the \textbf{subject} (human or non-human) that is the target of the evaluation.
 \end{itemize}
-These identities may be expressed via \textbf{tokens}, \textbf{SPIFFE}, \textbf{ZCAP-LD,}, or any other valid identity proof.  
+These identities may be expressed via \textbf{tokens}, \textbf{SPIFFE}, \textbf{ZCAP-LD}, or any other valid identity proof.  
 
 \vspace{0.5em}  
-In this way, a \textbf{Trust Chain} can be built as the composition of multiple \textbf{Trust Inputs}, 
+In this way, a \textbf{Trusted Chain} can be built as the composition of multiple \textbf{Trusted Inputs}, 
 possibly with parallel branches. These inputs must connect with autonomous components 
 and be usable across multiple transport layers.
 
-The PDP receives as input an \textbf{authorization context}, which includes:
+\vspace{0.5em} The PDP receives as input an \textbf{authorization context}, which includes:
 \begin{itemize}
     \item the subject identity proof and related attributes (possibly from a \textbf{Policy Information Point (PIP)}),
     \item the workload identity proof,
     \item information about the action requested.
 \end{itemize}
-Each of these is a \textbf{trust input}, which may be a token, a contextual signal, or other forms of trust such as \textbf{UCAN} or \textbf{ZCAP-LD}, depending on the use case and flow.  
+Each of these is a \textbf{Trusted Input}, which may be a token, a contextual signal, or other forms of trust such as \textbf{UCAN} or \textbf{ZCAP-LD}, depending on the use case and flow.  
 
 \vspace{0.5em}  
 To evaluate a request, the PDP must already have access to:
 \begin{itemize}
     \item a synchronized set of \textbf{policies},
-    \item additional \textbf{trust statements} (e.g., UCAN, ZCAP-LD, or others),
+    \item additional \textbf{trust statements} (e.g., UCAN, ZCAP-LD, Trust Levels, Trust Delegations or others),
     \item a mechanism for decision \textbf{logging and auditing}.
 \end{itemize}
 
 \vspace{0.5em}  
-During evaluation, the PDP creates an \textbf{authorization context} for the workload, 
-verifying whether it can act on behalf of the subject.  
-If conditions are satisfied, the system may perform a \textbf{Trust Elevation}, 
-allowing the workload to inherit subject permissions.  
-System owners must also be able to define under which conditions this is allowed, 
-possibly grouping workloads into \textbf{Trust Levels}, which require synchronization and governance.  
+During evaluation, the PDP creates an \textbf{authorization context} for the workload, verifying whether it can act on behalf of the subject.
+If conditions are satisfied, the system may perform a \textbf{Trust Elevation}, allowing the workload to stack a new Authorization Context on top of the existing one for the target subject.
 
 \begin{boxF}
 Example: John has a valid OAuth token to print a document, 
@@ -47,6 +43,10 @@ but policy restricts classified documents to printers in a secure segment with v
 Even with a valid token, printing must be blocked if the printer is not trusted at that moment.
 \end{boxF}
 
+\vspace{0.5em}  
+System owners must also be able to define under which conditions this is allowed, possibly grouping workloads into \textbf{Trust Levels}, which require synchronization and governance.  
+
+\vspace{0.5em}  
 Finally, the model must define how \textbf{Trust Delegation} works, 
 ensuring safe delegation of rights across entities.
 
@@ -60,7 +60,7 @@ ensuring safe delegation of rights across entities.
 \vspace{0.5em}  
 To enable such a protocol ref{fig:authzprotoco} , it is necessary to define and standardize:
 \begin{itemize}
-    \item \textbf{Trust Inputs},
+    \item \textbf{Trusted Inputs},
     \item \textbf{Trust Decisions},
     \item \textbf{Trust Elevation},
     \item \textbf{Trust Levels},
